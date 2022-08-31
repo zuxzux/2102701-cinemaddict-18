@@ -1,11 +1,11 @@
 import { getRandomInteger, getRandomValue } from '../utils.js';
-import { generateComment } from './comments.js';
-import {POSTERS, TITLES, Rating, Age, FIRST_NAMES, LAST_NAMES, nameCount, COUNTRIES, GENRES, RunTimes, DESCRIPTIONS, GenresCount} from './const.js';
+import { generateComments } from './comments.js';
+import {POSTERS, TITLES, Rating, Age, FIRST_NAMES, LAST_NAMES, nameCount, COUNTRIES, GENRES, RunTimes, DESCRIPTIONS, GenresCount, FILM_COUNT} from './const.js';
 
-export const generateFilm = () => (
+const generateFilm = (id) => (
   {
-    id: 0,
-    comments: generateComment(),
+    id,
+    comments: generateComments(),
     filmInfo: {
       title: getRandomValue(TITLES),
       alternativeTitle: getRandomValue(TITLES),
@@ -32,4 +32,7 @@ export const generateFilm = () => (
   }
 );
 
-
+export const generateFilms = () => {
+  const films = Array.from({length: FILM_COUNT}, (element, id)=>generateFilm(id + 1));
+  return (films);
+};

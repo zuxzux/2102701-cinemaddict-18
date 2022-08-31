@@ -1,4 +1,4 @@
-const nameCount = 3;
+const nameCount = 2;
 const FILM_COUNT = 5;
 const COMMENT_COUNT = 3;
 const GenresCount = {

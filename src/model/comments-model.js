@@ -1,9 +1,9 @@
-import { generateComment } from '../mock/comments.js';
-import { COMMENT_COUNT } from '../mock/const.js';
+import { generateComments } from '../mock/comments.js';
+
 
 export default class CommentsModel {
-  films = Array.from({length: COMMENT_COUNT}, generateComment);
+  comments = generateComments();
 
-  getComments = () => this.films;
+  getComments = () => this.comments;
 }
 

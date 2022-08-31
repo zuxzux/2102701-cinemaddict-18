@@ -2,6 +2,24 @@ import {createElement} from '../render.js';
 
 const createFilmDetailsTemplate = (film) => {
   const {filmInfo, comments} = film;
+  let commentsList = '';
+
+  for (let i = 0; i < comments.length; i++) {
+    const comment = comments[i];
+    commentsList += `<li class="film-details__comment">
+      <span class="film-details__comment-emoji">
+        <img src=${comment.emotion} width="55" height="55" alt="emoji-smile">
+      </span>
+      <div>
+        <p class="film-details__comment-text">${comment.comment}</p>
+        <p class="film-details__comment-info">
+          <span class="film-details__comment-author">${comment.author}</span>
+          <span class="film-details__comment-day">2019/12/31 23:59</span>
+          <button class="film-details__comment-delete">Delete</button>
+        </p>
+      </div>
+    </li>`;
+  }
   return (
     `<section class="film-details">
     <div class="film-details__inner">
@@ -72,58 +90,7 @@ const createFilmDetailsTemplate = (film) => {
         <section class="film-details__comments-wrap">
           <h3 class="film-details__comments-title">Comments <span class="film-details__comments-count">4</span></h3>
           <ul class="film-details__comments-list">
-            <li class="film-details__comment">
-              <span class="film-details__comment-emoji">
-                <img src=${comments.emotion} width="55" height="55" alt="emoji-smile">
-              </span>
-              <div>
-                <p class="film-details__comment-text">${comments.comment}</p>
-                <p class="film-details__comment-info">
-                  <span class="film-details__comment-author">${comments.author}</span>
-                  <span class="film-details__comment-day">2019/12/31 23:59</span>
-                  <button class="film-details__comment-delete">Delete</button>
-                </p>
-              </div>
-            </li>
-            <li class="film-details__comment">
-              <span class="film-details__comment-emoji">
-                <img src=${comments.emotion} width="55" height="55" alt="emoji-sleeping">
-              </span>
-              <div>
-                <p class="film-details__comment-text">${comments.comment}</p>
-                <p class="film-details__comment-info">
-                  <span class="film-details__comment-author">${comments.author}</span>
-                  <span class="film-details__comment-day">2 days ago</span>
-                  <button class="film-details__comment-delete">Delete</button>
-                </p>
-              </div>
-            </li>
-            <li class="film-details__comment">
-              <span class="film-details__comment-emoji">
-                <img src=${comments.emotion} width="55" height="55" alt="emoji-puke">
-              </span>
-              <div>
-                <p class="film-details__comment-text">${comments.comment}</p>
-                <p class="film-details__comment-info">
-                  <span class="film-details__comment-author">${comments.author}</span>
-                  <span class="film-details__comment-day">2 days ago</span>
-                  <button class="film-details__comment-delete">Delete</button>
-                </p>
-              </div>
-            </li>
-            <li class="film-details__comment">
-              <span class="film-details__comment-emoji">
-                <img src=${comments.emotion} width="55" height="55" alt="emoji-angry">
-              </span>
-              <div>
-                <p class="film-details__comment-text">${comments.comment}</p>
-                <p class="film-details__comment-info">
-                  <span class="film-details__comment-author">${comments.author}</span>
-                  <span class="film-details__comment-day">Today</span>
-                  <button class="film-details__comment-delete">Delete</button>
-                </p>
-              </div>
-            </li>
+            ${commentsList}
           </ul>
           <form class="film-details__new-comment" action="" method="get">
             <div class="film-details__add-emoji-label"></div>

@@ -3,8 +3,7 @@ import {createElement} from '../render.js';
 const createFilmCardTemplate = (film) => {
   const {filmInfo} = film;
   return (
-    `<div class="films-list__container">
-    <article class="film-card">
+    `<article class="film-card">
       <a class="film-card__link">
         <h3 class="film-card__title">${filmInfo.title}</h3>
         <p class="film-card__rating">${filmInfo.totalRating}</p>
@@ -24,7 +23,7 @@ const createFilmCardTemplate = (film) => {
       </div>
     </article>
 
-  </div>`
+  `
   );
 };
 

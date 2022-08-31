@@ -1,7 +1,7 @@
 import {createElement} from '../render.js';
 
 const createFilmListTemplate = () => (
-  '<section class="films-list"></section>'
+  '<div class="films-list__container"></div>'
 );
 
 export default class FilmListView {
