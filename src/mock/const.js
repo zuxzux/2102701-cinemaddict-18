@@ -1,19 +1,20 @@
 const nameCount = 2;
-const FILM_COUNT = 5;
+const FILM_COUNT = 23;
 const COMMENT_COUNT = 3;
+const FILM_COUNT_PER_STEP = 5;
 const GenresCount = {
   min: 1,
   max: 3
 };
 
 const POSTERS = [
-  '../images/posters/made-for-each-other.png',
-  '../images/posters/popeye-meets-sinbad.png',
-  '../images/posters/sagebrush-trail.jpg',
-  '../images/posters/santa-claus-conquers-the-martians.jpg',
-  '../images/posters/the-dance-of-life.jpg',
-  '../images/posters/the-great-flamarion.jpg',
-  '../images/posters/the-man-with-the-golden-arm.jpg'
+  './images/posters/made-for-each-other.png',
+  './images/posters/popeye-meets-sinbad.png',
+  './images/posters/sagebrush-trail.jpg',
+  './images/posters/santa-claus-conquers-the-martians.jpg',
+  './images/posters/the-dance-of-life.jpg',
+  './images/posters/the-great-flamarion.jpg',
+  './images/posters/the-man-with-the-golden-arm.jpg'
 ];
 
 const Age = {
@@ -90,10 +91,10 @@ const DESCRIPTIONS = [
 ];
 
 const EMOTIONS = [
-  '../images/emoji/angry.png',
-  '../images/emoji/puke.png',
-  '../images/emoji/sleeping.png',
-  '../images/emoji/smile.png'
+  './images/emoji/angry.png',
+  './images/emoji/puke.png',
+  './images/emoji/sleeping.png',
+  './images/emoji/smile.png'
 ];
 
-export {POSTERS, TITLES, Rating, Age, FIRST_NAMES, LAST_NAMES, nameCount, COUNTRIES, GENRES, RunTimes, DESCRIPTIONS, FILM_COUNT, GenresCount, EMOTIONS, COMMENT_COUNT};
+export {POSTERS, TITLES, Rating, Age, FIRST_NAMES, LAST_NAMES, nameCount, COUNTRIES, GENRES, RunTimes, DESCRIPTIONS, FILM_COUNT, GenresCount, EMOTIONS, COMMENT_COUNT, FILM_COUNT_PER_STEP};
