@@ -23,7 +23,7 @@ export default class ContentPresenter {
     this.#commentsModel = commentsModel;
     render(this.#filmListComponent, this.#contentContainer);
 
-    if (this.#boardFilms <= 0) {
+    if (this.#boardFilms.length <= 0) {
       render(this.#filmLoadingComponent, this.#filmListComponent.element);
     } else {
       for(let i = 0; i < Math.min(this.#boardFilms.length, FILM_COUNT_PER_STEP); i++) {
