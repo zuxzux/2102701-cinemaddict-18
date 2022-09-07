@@ -2,7 +2,7 @@ import ShowMoreButtonView from '../view/showmore-button-view.js';
 import FilmCardView from '../view/film-card-view.js';
 import FilmListView from '../view/film-list-view.js';
 import FilmDetailsView from '../view/film-details-view.js';
-import { render } from '../render.js';
+import { render } from '../framework/render.js';
 import {FILM_COUNT_PER_STEP} from '../mock/const.js';
 import FilmLoadingView from '../view/film-loading-view.js';
 
@@ -33,13 +33,12 @@ export default class ContentPresenter {
       if (this.#boardFilms.length > FILM_COUNT_PER_STEP) {
         render(this.#showMoreButtonComponent, this.#contentContainer);
 
-        this.#showMoreButtonComponent.element.addEventListener('click', this.#handlerShowMoreButtonClick);
+        this.#showMoreButtonComponent.setClickHandler(this.#handlerShowMoreButtonClick);
       }
     }
   }
 
-  #handlerShowMoreButtonClick = (evt) => {
-    evt.preventDefault();
+  #handlerShowMoreButtonClick = () => {
     this.#boardFilms
       .slice(this.#renderedFilmCount, this.#renderedFilmCount + FILM_COUNT_PER_STEP)
       .forEach((film) => this.#renderFilm(film));
@@ -76,13 +75,12 @@ export default class ContentPresenter {
       }
     };
 
-    filmComponent.element.addEventListener('click', () => {
+    filmComponent.setOpenPopupHandler(() => {
       replaceCardToPopup();
       document.addEventListener('keydown', onEscKeyDown);
     });
 
-    filmDetailsComponent.element.querySelector('.film-details__close-btn').addEventListener('click', (evt) => {
-      evt.preventDefault();
+    filmDetailsComponent.setCloseBtnClickHandler(() => {
       replacePopupToCard();
       document.removeEventListener('keydown', onEscKeyDown);
     });
