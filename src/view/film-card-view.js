@@ -1,4 +1,4 @@
-import {createElement} from '../render.js';
+import AbstractView from '../framework/view/abstract-view.js';
 
 const createFilmCardTemplate = (film) => {
   const {filmInfo} = film;
@@ -27,11 +27,11 @@ const createFilmCardTemplate = (film) => {
   );
 };
 
-export default class FilmCardView {
-  #element = null;
+export default class FilmCardView extends AbstractView {
   #film = null;
 
   constructor(film) {
+    super();
     this.#film = film;
   }
 
@@ -39,15 +39,13 @@ export default class FilmCardView {
     return createFilmCardTemplate(this.#film);
   }
 
-  get element() {
-    if (!this.#element) {
-      this.#element = createElement(this.template);
-    }
+  setOpenPopupHandler = (callback) => {
+    this._callback.openPopupClick = callback;
+    this.element.addEventListener('click', this.#openPopupClickHandler);
+  };
 
-    return this.#element;
-  }
-
-  removeElement() {
-    this.#element = null;
-  }
+  #openPopupClickHandler = (evt) => {
+    evt.preventDefault();
+    this._callback.openPopupClick();
+  };
 }

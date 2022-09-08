@@ -1,5 +1,5 @@
 import ContentPresenter from './presenter/content-presenter.js';
-import { render } from './render.js';
+import { render } from './framework/render.js';
 import UserRatingView from './view/user-rating-view.js';
 import FilmsModel from './model/film-model.js';
 import CommentsModel from './model/comments-model.js';
