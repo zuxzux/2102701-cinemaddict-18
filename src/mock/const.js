@@ -7,6 +7,13 @@ const GenresCount = {
   max: 3
 };
 
+const FilterType = {
+  ALL: 'All',
+  WATCHLIST: 'Watchlist',
+  HISTORY: 'History',
+  FAVORITES: 'Favorites'
+};
+
 const POSTERS = [
   './images/posters/made-for-each-other.png',
   './images/posters/popeye-meets-sinbad.png',
@@ -97,4 +104,4 @@ const EMOTIONS = [
   './images/emoji/smile.png'
 ];
 
-export {POSTERS, TITLES, Rating, Age, FIRST_NAMES, LAST_NAMES, nameCount, COUNTRIES, GENRES, RunTimes, DESCRIPTIONS, FILM_COUNT, GenresCount, EMOTIONS, COMMENT_COUNT, FILM_COUNT_PER_STEP};
+export {POSTERS, TITLES, Rating, Age, FIRST_NAMES, LAST_NAMES, nameCount, COUNTRIES, GENRES, RunTimes, DESCRIPTIONS, FILM_COUNT, GenresCount, EMOTIONS, COMMENT_COUNT, FILM_COUNT_PER_STEP, FilterType};

@@ -24,10 +24,10 @@ const generateFilm = (id) => (
       description: getRandomValue(DESCRIPTIONS)
     },
     userDetails: {
-      watchlist: false,
-      alreadyWatched: true,
+      watchlist: Math.random() >= 0.5,
+      alreadyWatched: Math.random() >= 0.5,
       watchingDate: '2019-04-12T16:12:32.554Z',
-      favorite: false
+      favorite: Math.random() >= 0.5
     }
   }
 );
