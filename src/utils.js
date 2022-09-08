@@ -13,10 +13,10 @@ const getRandomInteger = (a = 0, b = 1) => {
 const getRandomValue = (items) => items[getRandomInteger(0, items.length - 1)];
 
 const filter = {
-  [FilterType.ALL]: (films) => films.filter,
-  [FilterType.WATCHLIST]: (films) => films.filter,
-  [FilterType.HISTORY]: (films) => films.filter,
-  [FilterType.FAVORITES]: (films) => films.filter
+  [FilterType.ALL]: (films) => films.slice(),
+  [FilterType.WATCHLIST]: (films) => films.filter((film) => film.userDetails.watchlist),
+  [FilterType.HISTORY]: (films) => films.filter((film) => film.userDetails.alreadyWatched),
+  [FilterType.FAVORITES]: (films) => films.filter((film) => film.userDetails.favorite)
 };
 
 export {getRandomInteger, humanizeFilmDueDate, getRandomValue, filter};
