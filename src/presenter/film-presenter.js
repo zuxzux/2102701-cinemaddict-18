@@ -40,18 +40,14 @@ export default class FilmPresenter {
       return;
     }
 
-    if(this.#mode === Mode.DEFAULT) {
-      replace(this.#filmComponent, prevFilmComponent);
-      this.#addOpenClosePopupEventListeners();
-      this.#addFiltersButtonsEventListeners();
-    }
+    replace(this.#filmComponent, prevFilmComponent);
 
     if(this.#mode === Mode.OPENED) {
       replace(this.#filmDetailsComponent, prevFilmDetailsComponent);
-      this.#addOpenClosePopupEventListeners();
-      this.#addFiltersButtonsEventListeners();
     }
-    //remove(prevFilmComponent);
+    this.#addOpenClosePopupEventListeners();
+    this.#addFiltersButtonsEventListeners();
+    remove(prevFilmComponent);
     remove(prevFilmDetailsComponent);
   };
 
