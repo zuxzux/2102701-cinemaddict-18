@@ -1,10 +1,10 @@
 import ShowMoreButtonView from '../view/showmore-button-view.js';
-import FilmCardView from '../view/film-card-view.js';
 import FilmListView from '../view/film-list-view.js';
-import FilmDetailsView from '../view/film-details-view.js';
-import { render } from '../framework/render.js';
+import { updateItem } from '../utils.js';
+import { remove, render } from '../framework/render.js';
 import {FILM_COUNT_PER_STEP} from '../mock/const.js';
 import FilmLoadingView from '../view/film-loading-view.js';
+import FilmPresenter from './film-presenter.js';
 
 export default class ContentPresenter {
   #filmListComponent = new FilmListView();
@@ -15,6 +15,7 @@ export default class ContentPresenter {
   #renderedFilmCount = FILM_COUNT_PER_STEP;
   #boardFilms = [];
   #filmLoadingComponent = new FilmLoadingView();
+  #filmPresenter = new Map();
 
   init (contentContainer, filmsModel, commentsModel) {
     this.#contentContainer = contentContainer;
@@ -52,39 +53,30 @@ export default class ContentPresenter {
   };
 
   #renderFilm = (film) => {
+    const filmPresenter = new FilmPresenter(this.#filmListComponent.element, this.#handleFilmChange, this.#handleModeChange);
+    filmPresenter.init(film);
+    this.#filmPresenter.set(film.id, filmPresenter);
+  };
 
-    const filmComponent = new FilmCardView(film);
-    const comments = [...this.#commentsModel.comments];
-    const filmDetailsComponent = new FilmDetailsView(film, comments);
+  #renderFilms = (from, to) => {
+    this.#boardFilms
+      .slice(from, to)
+      .forEach((film) => this.#renderFilm(film));
+  };
 
-    const replaceCardToPopup = () => {
-      this.#filmListComponent.element.appendChild(filmDetailsComponent.element);
-      document.querySelector('body').classList.add('hide-overflow');
-    };
+  #handleModeChange = () => {
+    this.#filmPresenter.forEach((presenter) => presenter.resetView());
+  };
 
-    const replacePopupToCard = () => {
-      this.#filmListComponent.element.removeChild(filmDetailsComponent.element);
-      document.querySelector('body').classList.remove('hide-overflow');
-    };
+  #clearFilmList = () => {
+    this.#filmPresenter.forEach((presenter) => presenter.destroy());
+    this.#filmPresenter.clear();
+    this.#renderedFilmCount = FILM_COUNT_PER_STEP;
+    remove(this.#showMoreButtonComponent);
+  };
 
-    const onEscKeyDown = (evt) => {
-      if (evt.key === 'Escape' || evt.key === 'Esc') {
-        evt.preventDefault();
-        replacePopupToCard();
-        document.removeEventListener('keydown', onEscKeyDown);
-      }
-    };
-
-    filmComponent.setOpenPopupHandler(() => {
-      replaceCardToPopup();
-      document.addEventListener('keydown', onEscKeyDown);
-    });
-
-    filmDetailsComponent.setCloseBtnClickHandler(() => {
-      replacePopupToCard();
-      document.removeEventListener('keydown', onEscKeyDown);
-    });
-
-    render(filmComponent, this.#filmListComponent.element);
+  #handleFilmChange = (updatedFilm) => {
+    this.#boardFilms = updateItem(this.#boardFilms, updatedFilm);
+    this.#filmPresenter.get(updatedFilm.id).init(updatedFilm);
   };
 }
