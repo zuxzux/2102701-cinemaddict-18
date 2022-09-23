@@ -1,4 +1,5 @@
 import AbstractView from '../framework/view/abstract-view.js';
+import { humanizeFilmDueDate } from '../utils.js';
 
 const createFilmDetailsTemplate = (film) => {
   const {filmInfo, comments, userDetails} = film;
@@ -57,7 +58,7 @@ const createFilmDetailsTemplate = (film) => {
               </tr>
               <tr class="film-details__row">
                 <td class="film-details__term">Release Date</td>
-                <td class="film-details__cell">${filmInfo.release.date}</td>
+                <td class="film-details__cell">${humanizeFilmDueDate(filmInfo.release.date)}</td>
               </tr>
               <tr class="film-details__row">
                 <td class="film-details__term">Runtime</td>
@@ -70,8 +71,6 @@ const createFilmDetailsTemplate = (film) => {
               <tr class="film-details__row">
                 <td class="film-details__term">Genres</td>
                 <td class="film-details__cell">
-                  <span class="film-details__genre">${filmInfo.genre}</span>
-                  <span class="film-details__genre">${filmInfo.genre}</span>
                   <span class="film-details__genre">${filmInfo.genre}</span></td>
               </tr>
             </table>

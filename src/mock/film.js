@@ -2,7 +2,7 @@ import { getRandomInteger, getRandomValue } from '../utils.js';
 import { generateComments } from './comments.js';
 import {POSTERS, TITLES, Rating, Age, FIRST_NAMES, LAST_NAMES, nameCount, COUNTRIES, GENRES, RunTimes, DESCRIPTIONS, GenresCount, FILM_COUNT} from './const.js';
 import {nanoid} from 'nanoid';
-const generateFilm = (id) => (
+const generateFilm = () => (
   {
     id: nanoid(),
     comments: generateComments(),

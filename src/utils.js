@@ -2,7 +2,23 @@ import dayjs from 'dayjs';
 import { FilterType } from './mock/const.js';
 
 
-const humanizeFilmDueDate = (dueDate) => dayjs(dueDate).format('D MMMM YYYY');
+const humanizeFilmDueDate = (date) => dayjs(date).format('D MMMM');
+
+const getWeightForNull = (dateA, dateB) => {
+  if (dateA === null && dateB === null) {
+    return 0;
+  }
+
+  if (dateA === null) {
+    return 1;
+  }
+
+  if (dateB === null) {
+    return -1;
+  }
+
+  return null;
+};
 
 const getRandomInteger = (a = 0, b = 1) => {
   const lower = Math.ceil(Math.min(a, b));
@@ -31,4 +47,16 @@ const updateItem = (items, update) => {
   ];
 };
 
-export {getRandomInteger, humanizeFilmDueDate, getRandomValue, filter, updateItem};
+
+const sortFilmDate = (filmA, filmB) => {
+  const weight = getWeightForNull(filmA.filmInfo.release.date, filmB.filmInfo.release.date);
+  return weight ?? dayjs(filmA.filmInfo.release.date).diff(dayjs(filmB.filmInfo.release.date));
+};
+
+const sortFilmRating = (filmA, filmB) => {
+  const weight = getWeightForNull(filmA.filmInfo.totalRating, filmB.filmInfo.totalRating);
+  return weight ?? filmB.filmInfo.totalRating - filmA.filmInfo.totalRating;
+};
+
+
+export {getRandomInteger, humanizeFilmDueDate, sortFilmDate, sortFilmRating, getRandomValue, filter, updateItem};
