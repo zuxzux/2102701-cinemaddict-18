@@ -7,6 +7,12 @@ const GenresCount = {
   max: 3
 };
 
+const SortType = {
+  DEFAULT: 'default',
+  DATE_UP: 'date-up',
+  RATING_UP: 'rating-up',
+};
+
 const FilterType = {
   ALL: 'All',
   WATCHLIST: 'Watchlist',
@@ -104,4 +110,4 @@ const EMOTIONS = [
   './images/emoji/smile.png'
 ];
 
-export {POSTERS, TITLES, Rating, Age, FIRST_NAMES, LAST_NAMES, nameCount, COUNTRIES, GENRES, RunTimes, DESCRIPTIONS, FILM_COUNT, GenresCount, EMOTIONS, COMMENT_COUNT, FILM_COUNT_PER_STEP, FilterType};
+export {POSTERS, TITLES, Rating, Age, SortType, FIRST_NAMES, LAST_NAMES, nameCount, COUNTRIES, GENRES, RunTimes, DESCRIPTIONS, FILM_COUNT, GenresCount, EMOTIONS, COMMENT_COUNT, FILM_COUNT_PER_STEP, FilterType};

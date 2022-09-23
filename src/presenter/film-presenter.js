@@ -33,6 +33,7 @@ export default class FilmPresenter {
     this.#filmComponent = new FilmCardView(film);
     this.#filmDetailsComponent = new FilmDetailsView(film, comments);
 
+
     if(prevFilmComponent === null || prevFilmDetailsComponent === null) {
       render(this.#filmComponent, this.#filmListContainer);
       this.#addOpenClosePopupEventListeners();
@@ -77,7 +78,7 @@ export default class FilmPresenter {
     this.#filmDetailsComponent.setFavoriteHandler(this.#favoriteHandler);
   };
 
-  #destroy = () => {
+  destroy = () => {
     remove(this.#filmComponent);
     remove(this.#filmDetailsComponent);
   };
@@ -107,7 +108,7 @@ export default class FilmPresenter {
   };
 
   #markAsWatchedHandler = () => {
-    this.#changeData({...this.#film, userDetails:{...this.#film.userDetails, alreadyWatched: !this.#film.userDetails.alreadyWatched}});
+    this.#changeData({...this.#film, userDetails:{...this.#film.userDetails, alreadyWatched: !this.#film.userDetails.alreadyWatched, watchingDate: Date.now()}});
   };
 
   #favoriteHandler = () => {
