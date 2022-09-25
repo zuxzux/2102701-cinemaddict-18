@@ -17,21 +17,27 @@ export default class FilmPresenter {
   #changeMode = null;
   #mode = Mode.DEFAULT;
 
+  #viewData = {
+    emotion: null,
+    comment: null,
+    scrollPosition: 0
+  };
+
   constructor(filmListContainer, changeData, changeMode) {
     this.#filmListContainer = filmListContainer;
     this.#changeData = changeData;
     this.#changeMode = changeMode;
   }
 
-  init = (film, comments) => {
+  init = (film) => {
     this.#film = film;
-    this.#comments = comments;
+    this.#comments = film.comments;
 
     const prevFilmComponent = this.#filmComponent;
     const prevFilmDetailsComponent = this.#filmDetailsComponent;
 
     this.#filmComponent = new FilmCardView(film);
-    this.#filmDetailsComponent = new FilmDetailsView(film, comments);
+    this.#filmDetailsComponent = new FilmDetailsView(this.#film, this.#comments, this.#viewData, this.#updateViewData);
 
 
     if(prevFilmComponent === null || prevFilmDetailsComponent === null) {
@@ -46,6 +52,8 @@ export default class FilmPresenter {
     if(this.#mode === Mode.OPENED) {
       replace(this.#filmDetailsComponent, prevFilmDetailsComponent);
     }
+    this.#filmDetailsComponent.setScrollPosition();
+
     this.#addOpenClosePopupEventListeners();
     this.#addFiltersButtonsEventListeners();
     remove(prevFilmComponent);
@@ -81,6 +89,10 @@ export default class FilmPresenter {
   destroy = () => {
     remove(this.#filmComponent);
     remove(this.#filmDetailsComponent);
+  };
+
+  #updateViewData = (viewData) => {
+    this.#viewData = {...viewData};
   };
 
   #openPopupHandler = () => {
