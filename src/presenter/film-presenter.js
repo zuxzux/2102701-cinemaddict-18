@@ -19,7 +19,7 @@ export default class FilmPresenter {
 
   #viewData = {
     emotion: null,
-    comment: null,
+    comment: '',
     scrollPosition: 0
   };
 
@@ -36,7 +36,7 @@ export default class FilmPresenter {
     const prevFilmComponent = this.#filmComponent;
     const prevFilmDetailsComponent = this.#filmDetailsComponent;
 
-    this.#filmComponent = new FilmCardView(film);
+    this.#filmComponent = new FilmCardView(this.#film);
     this.#filmDetailsComponent = new FilmDetailsView(this.#film, this.#comments, this.#viewData, this.#updateViewData);
 
 
@@ -48,6 +48,12 @@ export default class FilmPresenter {
     }
 
     replace(this.#filmComponent, prevFilmComponent);
+
+    if(prevFilmDetailsComponent){
+      prevFilmDetailsComponent.updateElement(this.#film);
+    } else {
+      this.#filmDetailsComponent = new FilmDetailsView(this.#film, this.#comments, this.#viewData, this.#updateViewData);
+    }
 
     if(this.#mode === Mode.OPENED) {
       replace(this.#filmDetailsComponent, prevFilmDetailsComponent);
@@ -112,6 +118,7 @@ export default class FilmPresenter {
     if (evt.key === 'Escape' || evt.key === 'Esc') {
       evt.preventDefault();
       this.#removePopupHandler();
+      document.removeEventListener('keydown', this.#onEscKeyDown);
     }
   };
 
