@@ -37,7 +37,6 @@ export default class FilmPresenter {
     const prevFilmDetailsComponent = this.#filmDetailsComponent;
 
     this.#filmComponent = new FilmCardView(this.#film);
-    //this.#filmDetailsComponent = new FilmDetailsView(this.#film, this.#comments, this.#viewData, this.#updateViewData);
 
     if(prevFilmDetailsComponent) {
       prevFilmDetailsComponent.updateElement(this.#film);
@@ -54,16 +53,11 @@ export default class FilmPresenter {
 
     replace(this.#filmComponent, prevFilmComponent);
 
-
-    // if(this.#mode === Mode.OPENED) {
-    //   replace(this.#filmDetailsComponent, prevFilmDetailsComponent);
-    // }
     this.#filmDetailsComponent.setScrollPosition();
 
     this.#addOpenClosePopupEventListeners();
     this.#addFiltersButtonsEventListeners();
     remove(prevFilmComponent);
-    // remove(prevFilmDetailsComponent);
   };
 
   resetView = () => {
@@ -89,19 +83,12 @@ export default class FilmPresenter {
       this.#openPopupHandler();
       document.addEventListener('keydown', this.#onEscKeyDown);
     });
-    // this.#filmDetailsComponent.setCloseBtnClickHandler(() => {
-    //   this.#removePopupHandler();
-    //   document.removeEventListener('keydown', this.#onEscKeyDown);
-    // });
   };
 
   #addFiltersButtonsEventListeners = () => {
     this.#filmComponent.setAddToWatchlistHandler(this.#addToWatchlistHandler);
     this.#filmComponent.setMarkAsWatchedHandler(this.#markAsWatchedHandler);
     this.#filmComponent.setFavoriteHandler(this.#favoriteHandler);
-    // this.#filmDetailsComponent.setAddToWatchlistHandler(this.#addToWatchlistHandler);
-    // this.#filmDetailsComponent.setMarkAsWatchedHandler(this.#markAsWatchedHandler);
-    // this.#filmDetailsComponent.setFavoriteHandler(this.#favoriteHandler);
   };
 
   destroy = () => {
@@ -124,7 +111,6 @@ export default class FilmPresenter {
   };
 
   #removePopupHandler = () => {
-    // this.#filmListContainer.removeChild(this.#filmDetailsComponent.element);
     if (this.#filmDetailsComponent) {
       this.#filmDetailsComponent.element.remove();
       this.#filmDetailsComponent.removeElement();
