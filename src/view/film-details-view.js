@@ -1,6 +1,7 @@
 import AbstractStatefulView from '../framework/view/abstract-stateful-view.js';
 import { EMOTIONS } from '../mock/const.js';
 import { humanizeFilmDueDate } from '../utils.js';
+import { formatStringToDateWithTime, formatMinutesToTime } from '../utils.js';
 
 const createFilmDetailsTemplate = (film) => {
   const {filmInfo, comments, userDetails, checkedEmotion } = film;
@@ -17,7 +18,7 @@ const createFilmDetailsTemplate = (film) => {
         <p class="film-details__comment-text">${comment.comment}</p>
         <p class="film-details__comment-info">
           <span class="film-details__comment-author">${comment.author}</span>
-          <span class="film-details__comment-day">2019/12/31 23:59</span>
+          <span class="film-details__comment-day">${formatStringToDateWithTime('2019/12/31 23:59')}</span>
           <button class="film-details__comment-delete">Delete</button>
         </p>
       </div>
@@ -64,7 +65,7 @@ const createFilmDetailsTemplate = (film) => {
               </tr>
               <tr class="film-details__row">
                 <td class="film-details__term">Runtime</td>
-                <td class="film-details__cell">${filmInfo.runtime}m</td>
+                <td class="film-details__cell">${formatMinutesToTime(filmInfo.runtime)}m</td>
               </tr>
               <tr class="film-details__row">
                 <td class="film-details__term">Country</td>

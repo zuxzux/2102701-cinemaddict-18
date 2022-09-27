@@ -1,8 +1,13 @@
 import dayjs from 'dayjs';
+import duration from 'dayjs/plugin/duration';
 import { FilterType } from './mock/const.js';
 
+dayjs.extend(duration);
 
-const humanizeFilmDueDate = (date) => dayjs(date).format('D MMMM');
+const humanizeFilmDueDate = (date) => dayjs(date).format('D MMMM YYYY');
+const formatStringToDateWithTime = (date) => dayjs(date).format('YYYY MMMM DD HH:mm');
+const formatStringToYear = (date) => dayjs(date).format('YYYY');
+const formatMinutesToTime = (minutes) => dayjs.duration(minutes, 'minutes').format('H[h] mm[m]');
 
 const getWeightForNull = (dateA, dateB) => {
   if (dateA === null && dateB === null) {
@@ -59,4 +64,4 @@ const sortFilmRating = (filmA, filmB) => {
 };
 
 
-export {getRandomInteger, humanizeFilmDueDate, sortFilmDate, sortFilmRating, getRandomValue, filter, updateItem};
+export {getRandomInteger, humanizeFilmDueDate, sortFilmDate, sortFilmRating, getRandomValue, filter, updateItem, formatStringToDateWithTime, formatStringToYear, formatMinutesToTime};
