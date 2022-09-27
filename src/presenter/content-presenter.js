@@ -60,9 +60,6 @@ export default class ContentPresenter {
       this.#boardFilms
         .slice(from, to)
         .forEach((film) => this.#renderFilm(film));
-      /*for(let i = 0; i < Math.min(this.#boardFilms.length, FILM_COUNT_PER_STEP); i++) {
-        this.#renderFilm(this.#boardFilms[i]);
-      }*/
 
       if (this.#boardFilms.length > FILM_COUNT_PER_STEP) {
         render(this.#showMoreButtonComponent, this.#contentContainer);
@@ -80,7 +77,6 @@ export default class ContentPresenter {
     this.#filmPresenter.forEach((presenter) => presenter.destroy());
     this.#filmPresenter.clear();
     this.#renderedFilmCount = FILM_COUNT_PER_STEP;
-    //remove(this.#showMoreButtonComponent);
   };
 
   #handleFilmChange = (updatedFilm) => {
