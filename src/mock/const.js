@@ -7,6 +7,13 @@ const GenresCount = {
   max: 3
 };
 
+const LoadigText = {
+  ALL: 'There are no movies in our database',
+  WATCHLIST: 'There are no movies to watch now',
+  HISTORY: 'There are no watched movies now',
+  FAVORITES: 'There are no favorite movies now'
+};
+
 const SortType = {
   DEFAULT: 'default',
   DATE_UP: 'date-up',
@@ -110,4 +117,4 @@ const EMOTIONS = [
   './images/emoji/smile.png'
 ];
 
-export {POSTERS, TITLES, Rating, Age, SortType, FIRST_NAMES, LAST_NAMES, nameCount, COUNTRIES, GENRES, RunTimes, DESCRIPTIONS, FILM_COUNT, GenresCount, EMOTIONS, COMMENT_COUNT, FILM_COUNT_PER_STEP, FilterType};
+export {POSTERS, TITLES, Rating, Age, SortType, LoadigText, FIRST_NAMES, LAST_NAMES, nameCount, COUNTRIES, GENRES, RunTimes, DESCRIPTIONS, FILM_COUNT, GenresCount, EMOTIONS, COMMENT_COUNT, FILM_COUNT_PER_STEP, FilterType};

@@ -1,3 +1,5 @@
+import { nanoid } from 'nanoid';
+import he from 'he';
 import AbstractStatefulView from '../framework/view/abstract-stateful-view.js';
 import { EMOTIONS } from '../mock/const.js';
 import { humanizeFilmDueDate } from '../utils.js';
@@ -15,11 +17,11 @@ const createFilmDetailsTemplate = (film) => {
         <img src=${comment.emotion} width="55" height="55" alt="emoji-smile">
       </span>
       <div>
-        <p class="film-details__comment-text">${comment.comment}</p>
+        <p class="film-details__comment-text">${he.encode(comment.comment)}</p>
         <p class="film-details__comment-info">
           <span class="film-details__comment-author">${comment.author}</span>
           <span class="film-details__comment-day">${formatStringToDateWithTime('2019/12/31 23:59')}</span>
-          <button class="film-details__comment-delete">Delete</button>
+          <button class="film-details__comment-delete" data-id=${comment.id}>Delete</button>
         </p>
       </div>
     </li>`;
@@ -90,7 +92,7 @@ const createFilmDetailsTemplate = (film) => {
       </div>
       <div class="film-details__bottom-container">
         <section class="film-details__comments-wrap">
-          <h3 class="film-details__comments-title">Comments <span class="film-details__comments-count">4</span></h3>
+          <h3 class="film-details__comments-title">Comments <span class="film-details__comments-count">${film.comments.length}</span></h3>
           <ul class="film-details__comments-list">
             ${commentsList}
           </ul>
@@ -99,7 +101,7 @@ const createFilmDetailsTemplate = (film) => {
               ${checkedEmotion ? `<img src='${EMOTIONS[checkedEmotion]}' width="55" height="55" alt="emoji">` : ''}
             </div>
             <label class="film-details__comment-label">
-              <textarea class="film-details__comment-input" placeholder="Select reaction below and write comment here" name="comment">${saveComment}</textarea>
+              <textarea class="film-details__comment-input" placeholder="Select reaction below and write comment here" name="comment">${saveComment ? he.encode(saveComment) : ''}</textarea>
             </label>
             <div class="film-details__emoji-list">
               <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-smile" value="smile" ${checkedEmotion === '3' ? 'checked' : ''}>
@@ -141,6 +143,7 @@ export default class FilmDetailsView extends AbstractStatefulView {
       viewData.scrollPosition
     );
     this.updateViewData = updateViewData;
+    this.setScrollPosition();
     this.#setInnerHandlers();
   }
 
@@ -149,16 +152,29 @@ export default class FilmDetailsView extends AbstractStatefulView {
   }
 
   _restoreHandlers = () => {
-    this.setScrollPosition();
+    //this.setScrollPosition();
     this.#setInnerHandlers();
     this.setCloseBtnClickHandler(this._callback.closeClick);
     this.setAddToWatchlistHandler(this._callback.addToWatchlistClick);
     this.setMarkAsWatchedHandler(this._callback.markAsWatchedClick);
     this.setFavoriteHandler(this._callback.favoriteClick);
+    this.setDeleteClickHandler(this._callback.deleteClick);
+    this.setAddCommentHandler(this._callback.addComment);
+  };
+
+  setAddCommentHandler = (callback) => {
+    this._callback.addComment = callback;
+    this.element.addEventListener('keydown', this.#addCommentKeydown);
   };
 
   setScrollPosition = () => {
     this.element.scrollTop = this._state.scrollPosition;
+  };
+
+  setDeleteClickHandler = (callback) => {
+    this.setScrollPosition();
+    this._callback.deleteClick = callback;
+    this.element.querySelectorAll('.film-details__comment-delete').forEach((button) => {button.addEventListener('click', this.#deleteBtnClickHandler);});
   };
 
   setCloseBtnClickHandler = (callback) => {
@@ -179,6 +195,24 @@ export default class FilmDetailsView extends AbstractStatefulView {
   setFavoriteHandler = (callback) => {
     this._callback.favoriteClick = callback;
     this.element.querySelector('.film-details__control-button--favorite').addEventListener('click', this.#favoriteClickHandler);
+  };
+
+  #addCommentKeydown = (evt) => {
+    if(evt.ctrlKey && evt.key === 'Enter') {
+      this._callback.addComment({
+        author: 'no name',
+        comment: this._state.comment,
+        date: new Date(),
+        emotion: EMOTIONS[this._state.checkedEmotion],
+        id: nanoid()
+      });
+    }
+  };
+
+  #deleteBtnClickHandler = (evt) => {
+    evt.preventDefault();
+    this.#updateViewData();
+    this._callback.deleteClick(evt.target.dataset.id);
   };
 
   #addToWatchlistClickHandler = (evt) => {

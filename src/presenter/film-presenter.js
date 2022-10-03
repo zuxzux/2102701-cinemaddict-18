@@ -46,7 +46,7 @@ export default class FilmPresenter {
 
     if(prevFilmComponent === null) {
       render(this.#filmComponent, this.#filmListContainer);
-      this.#addOpenClosePopupEventListeners();
+      this.#addOpenPopupEventListeners();
       this.#addFiltersButtonsEventListeners();
       return;
     }
@@ -55,7 +55,7 @@ export default class FilmPresenter {
 
     this.#filmDetailsComponent.setScrollPosition();
 
-    this.#addOpenClosePopupEventListeners();
+    this.#addOpenPopupEventListeners();
     this.#addFiltersButtonsEventListeners();
     remove(prevFilmComponent);
   };
@@ -76,9 +76,17 @@ export default class FilmPresenter {
     this.#filmDetailsComponent.setAddToWatchlistHandler(this.#addToWatchlistHandler);
     this.#filmDetailsComponent.setMarkAsWatchedHandler(this.#markAsWatchedHandler);
     this.#filmDetailsComponent.setFavoriteHandler(this.#favoriteHandler);
+    this.#filmDetailsComponent.setDeleteClickHandler(this.#deleteClickHandler);
+    this.#filmDetailsComponent.setAddCommentHandler(this.#addComment);
   };
 
-  #addOpenClosePopupEventListeners = () => {
+  #addComment = (comment) => {
+    this.#film.comments.push(comment);
+    this.#changeData({...this.#film, comments: this.#film.comments, comment: '', checkedEmotion: ''});
+
+  };
+
+  #addOpenPopupEventListeners = () => {
     this.#filmComponent.setOpenPopupHandler(() => {
       this.#openPopupHandler();
       document.addEventListener('keydown', this.#onEscKeyDown);
@@ -132,6 +140,10 @@ export default class FilmPresenter {
       this.#removePopupHandler();
       document.removeEventListener('keydown', this.#onEscKeyDown);
     }
+  };
+
+  #deleteClickHandler = (commentId) => {
+    this.#changeData({...this.#film, comments: this.#film.comments.filter((comment) => comment.id !== commentId)});
   };
 
   #addToWatchlistHandler = () => {
