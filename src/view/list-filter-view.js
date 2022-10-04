@@ -1,14 +1,14 @@
 import AbstractView from '../framework/view/abstract-view.js';
 
-const createFilterItemTemplate = (filter, isActive) => {
-  const {name, count} = filter;
+const createFilterItemTemplate = (filter, filterType) => {
+  const {name, count, type} = filter;
   return (
-    `<a href=#${name} class="main-navigation__item ${isActive ? 'main-navigation__item--active' : ''}">${name}<span class="main-navigation__item-count"> ${count}</span></a>`
+    `<a href=#${name} class="main-navigation__item ${filterType === type ? 'main-navigation__item--active' : ''}" data-filter-type="${type}">${name}<span class="main-navigation__item-count" data-filter-type="${type}"> ${count}</span></a>`
   );
 };
 
-const createListFilterTemplate = (filterItems) => {
-  const filterItemsTemplate = filterItems.map((filter, index) => createFilterItemTemplate(filter, index === 0)).join('');
+const createListFilterTemplate = (filterItems, filterType) => {
+  const filterItemsTemplate = filterItems.map((filter) => createFilterItemTemplate(filter, filterType)).join('');
   return (
     `<nav class="main-navigation">${filterItemsTemplate}</nav>`
   );
@@ -17,12 +17,29 @@ const createListFilterTemplate = (filterItems) => {
 export default class ListFilterView extends AbstractView {
   #filters = null;
 
-  constructor(filters) {
+  #filterType = 'all';
+  constructor(filters, filterType) {
     super();
     this.#filters = filters;
+    this.#filterType = filterType;
   }
 
   get template() {
-    return createListFilterTemplate(this.#filters);
+    return createListFilterTemplate(this.#filters, this.#filterType);
+
   }
+
+  setFilterTypeChangeHandler = (callback) => {
+    this._callback.filterTypeChange = callback;
+    this.element.addEventListener('click', this.#filterTypeChangeHandler);
+  };
+
+  #filterTypeChangeHandler = (evt) => {
+    if (evt.target.tagName !== 'A' && !evt.target.classList.contains('main-navigation__item-count')) {
+      return;
+    }
+
+    evt.preventDefault();
+    this._callback.filterTypeChange(evt.target.dataset.filterType);
+  };
 }

@@ -16,7 +16,7 @@ const createFilmCardTemplate = (film) => {
         </p>
         <img src=${filmInfo.poster} alt="" class="film-card__poster">
         <p class="film-card__description">${filmInfo.description}</p>
-        <span class="film-card__comments">18 comments</span>
+        <span class="film-card__comments">${film.comments.length > 0 ? film.comments.length : ''} Comments</span>
       </a>
       <div class="film-card__controls">
         <button class="film-card__controls-item film-card__controls-item--add-to-watchlist ${userDetails.watchlist ? 'film-card__controls-item--active' : ''}" type="button">Add to watchlist</button>

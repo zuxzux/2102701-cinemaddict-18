@@ -5,7 +5,7 @@ import { FilterType } from './mock/const.js';
 dayjs.extend(duration);
 
 const humanizeFilmDueDate = (date) => dayjs(date).format('D MMMM YYYY');
-const formatStringToDateWithTime = (date) => dayjs(date).format('YYYY MMMM DD HH:mm');
+const formatStringToDateWithTime = (date) => dayjs(date).format('YYYY/MM/DD HH:mm');
 const formatStringToYear = (date) => dayjs(date).format('YYYY');
 const formatMinutesToTime = (minutes) => dayjs.duration(minutes, 'minutes').format('H[h] mm[m]');
 
@@ -34,10 +34,10 @@ const getRandomInteger = (a = 0, b = 1) => {
 const getRandomValue = (items) => items[getRandomInteger(0, items.length - 1)];
 
 const filter = {
-  [FilterType.ALL]: (films) => films.slice(),
-  [FilterType.WATCHLIST]: (films) => films.filter((film) => film.userDetails.watchlist),
-  [FilterType.HISTORY]: (films) => films.filter((film) => film.userDetails.alreadyWatched),
-  [FilterType.FAVORITES]: (films) => films.filter((film) => film.userDetails.favorite)
+  [FilterType.ALL.toLowerCase()]: (films) => films.slice(),
+  [FilterType.WATCHLIST.toLowerCase()]: (films) => films.filter((film) => film.userDetails.watchlist),
+  [FilterType.HISTORY.toLowerCase()]: (films) => films.filter((film) => film.userDetails.alreadyWatched),
+  [FilterType.FAVORITES.toLowerCase()]: (films) => films.filter((film) => film.userDetails.favorite)
 };
 
 const updateItem = (items, update) => {
