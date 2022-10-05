@@ -1,9 +1,10 @@
 import AbstractView from '../framework/view/abstract-view.js';
+import { FilterType } from '../mock/const.js';
 
 const createFilterItemTemplate = (filter, filterType) => {
   const {name, count, type} = filter;
   return (
-    `<a href=#${name} class="main-navigation__item ${filterType === type ? 'main-navigation__item--active' : ''}" data-filter-type="${type}">${name}<span class="main-navigation__item-count" data-filter-type="${type}"> ${count}</span></a>`
+    `<a href=#${name} class="main-navigation__item ${filterType === type ? 'main-navigation__item--active' : ''}" data-filter-type="${type}">${name}${type === 'All movies' ? '' : `<span class="main-navigation__item-count" data-filter-type="${type}">${count}</span>`}</a>`
   );
 };
 
@@ -17,7 +18,7 @@ const createListFilterTemplate = (filterItems, filterType) => {
 export default class ListFilterView extends AbstractView {
   #filters = null;
 
-  #filterType = 'all';
+  #filterType = FilterType.ALL;
   constructor(filters, filterType) {
     super();
     this.#filters = filters;

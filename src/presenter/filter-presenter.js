@@ -1,5 +1,5 @@
 import ListFilterView from '../view/list-filter-view.js';
-import { generateFilter } from '../mock/filter.js';
+import { generateFilter } from '../utils.js';
 import { render, replace, remove } from '../framework/render.js';
 
 export default class FilterPresenter {
@@ -20,7 +20,7 @@ export default class FilterPresenter {
 
     const prevFilterComponent = this.#filterComponent;
 
-    this.#filterComponent = new ListFilterView(filters, this.#filterModel.filter.toLowerCase());
+    this.#filterComponent = new ListFilterView(filters, this.#filterModel.filter);
     this.#filterComponent.setFilterTypeChangeHandler(this.#filterTypeChangeHandler);
     if (prevFilterComponent === null) {
       render(this.#filterComponent, this.#filterContainter);

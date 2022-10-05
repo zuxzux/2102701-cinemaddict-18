@@ -10,9 +10,9 @@ const createFilmCardTemplate = (film) => {
         <h3 class="film-card__title">${filmInfo.title}</h3>
         <p class="film-card__rating">${filmInfo.totalRating}</p>
         <p class="film-card__info">
-          <span class="film-card__year">${formatStringToYear('1987,12,28')}</span>
+          <span class="film-card__year">${formatStringToYear(filmInfo.release.date)}</span>
           <span class="film-card__duration">${formatMinutesToTime(filmInfo.runtime)}</span>
-          <span class="film-card__genre">${filmInfo.genre}</span>
+          <span class="film-card__genre">${filmInfo.genre[0]}</span>
         </p>
         <img src=${filmInfo.poster} alt="" class="film-card__poster">
         <p class="film-card__description">${filmInfo.description}</p>

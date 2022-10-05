@@ -1,9 +1,15 @@
 import { nanoid } from 'nanoid';
 import he from 'he';
 import AbstractStatefulView from '../framework/view/abstract-stateful-view.js';
-import { EMOTIONS } from '../mock/const.js';
 import { humanizeFilmDueDate } from '../utils.js';
 import { formatStringToDateWithTime, formatMinutesToTime } from '../utils.js';
+
+const emotions = {
+  angry: './images/emoji/angry.png',
+  puke: './images/emoji/puke.png',
+  sleeping: './images/emoji/sleeping.png',
+  smile: './images/emoji/smile.png'
+};
 
 const createFilmDetailsTemplate = (film) => {
   const {filmInfo, comments, userDetails, checkedEmotion } = film;
@@ -12,19 +18,19 @@ const createFilmDetailsTemplate = (film) => {
 
   for (let i = 0; i < comments.length; i++) {
     const comment = comments[i];
-    commentsList += `<li class="film-details__comment">
+    commentsList += comment.author ? `<li class="film-details__comment">
       <span class="film-details__comment-emoji">
-        <img src=${comment.emotion} width="55" height="55" alt="emoji-smile">
+        ${comment.emotion ? `<img src="./images/emoji/${comment.emotion}.png" width="55" height="55" alt="emoji-smile"></img>` : ''}
       </span>
       <div>
-        <p class="film-details__comment-text">${he.encode(comment.comment)}</p>
+        <p class="film-details__comment-text">${comment.comment ? he.encode(comment.comment) : ''}</p>
         <p class="film-details__comment-info">
           <span class="film-details__comment-author">${comment.author}</span>
-          <span class="film-details__comment-day">${formatStringToDateWithTime('2019/12/31 23:59')}</span>
+          <span class="film-details__comment-day">${formatStringToDateWithTime(comment.date)}</span>
           <button class="film-details__comment-delete" data-id=${comment.id}>Delete</button>
         </p>
       </div>
-    </li>`;
+    </li>` : '';
   }
   return (
     `<section class="film-details">
@@ -67,7 +73,7 @@ const createFilmDetailsTemplate = (film) => {
               </tr>
               <tr class="film-details__row">
                 <td class="film-details__term">Runtime</td>
-                <td class="film-details__cell">${formatMinutesToTime(filmInfo.runtime)}m</td>
+                <td class="film-details__cell">${formatMinutesToTime(filmInfo.runtime)}</td>
               </tr>
               <tr class="film-details__row">
                 <td class="film-details__term">Country</td>
@@ -98,26 +104,26 @@ const createFilmDetailsTemplate = (film) => {
           </ul>
           <form class="film-details__new-comment" action="" method="get">
             <div class="film-details__add-emoji-label">
-              ${checkedEmotion ? `<img src='${EMOTIONS[checkedEmotion]}' width="55" height="55" alt="emoji">` : ''}
+              ${checkedEmotion ? `<img src='${emotions[checkedEmotion]}' width="55" height="55" alt="emoji">` : ''}
             </div>
             <label class="film-details__comment-label">
               <textarea class="film-details__comment-input" placeholder="Select reaction below and write comment here" name="comment">${saveComment ? he.encode(saveComment) : ''}</textarea>
             </label>
             <div class="film-details__emoji-list">
               <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-smile" value="smile" ${checkedEmotion === '3' ? 'checked' : ''}>
-              <label class="film-details__emoji-label" for="emoji-smile" data-emotion-type='3'>
+              <label class="film-details__emoji-label" for="emoji-smile" data-emotion-type='smile'>
                 <img src="./images/emoji/smile.png" width="30" height="30" alt="emoji">
               </label>
               <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-sleeping" value="sleeping" ${checkedEmotion === '2' ? 'checked' : ''}>
-              <label class="film-details__emoji-label" for="emoji-sleeping" data-emotion-type='2'>
+              <label class="film-details__emoji-label" for="emoji-sleeping" data-emotion-type='sleeping'>
                 <img src="./images/emoji/sleeping.png" width="30" height="30" alt="emoji">
               </label>
               <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-puke" value="puke" ${checkedEmotion === '1' ? 'checked' : ''}>
-              <label class="film-details__emoji-label" for="emoji-puke" data-emotion-type='1'>
+              <label class="film-details__emoji-label" for="emoji-puke" data-emotion-type='puke'>
                 <img src="./images/emoji/puke.png" width="30" height="30" alt="emoji">
               </label>
               <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-angry" value="angry" ${checkedEmotion === '0' ? 'checked' : ''}>
-              <label class="film-details__emoji-label" for="emoji-angry" data-emotion-type='0'>
+              <label class="film-details__emoji-label" for="emoji-angry" data-emotion-type='angry'>
                 <img src="./images/emoji/angry.png" width="30" height="30" alt="emoji">
               </label>
             </div>
@@ -135,6 +141,8 @@ export default class FilmDetailsView extends AbstractStatefulView {
 
   constructor(film, comments, viewData, updateViewData) {
     super();
+    this.#comments = comments;
+
     this._state = FilmDetailsView.parseFilmToState(
       film,
       comments,
@@ -152,7 +160,6 @@ export default class FilmDetailsView extends AbstractStatefulView {
   }
 
   _restoreHandlers = () => {
-    //this.setScrollPosition();
     this.#setInnerHandlers();
     this.setCloseBtnClickHandler(this._callback.closeClick);
     this.setAddToWatchlistHandler(this._callback.addToWatchlistClick);
@@ -203,7 +210,7 @@ export default class FilmDetailsView extends AbstractStatefulView {
         author: 'no name',
         comment: this._state.comment,
         date: new Date(),
-        emotion: EMOTIONS[this._state.checkedEmotion],
+        emotion: emotions[this._state.checkedEmotion],
         id: nanoid()
       });
     }
