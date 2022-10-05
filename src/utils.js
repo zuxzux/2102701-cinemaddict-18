@@ -2,6 +2,7 @@ import dayjs from 'dayjs';
 import duration from 'dayjs/plugin/duration';
 import { FilterType } from './mock/const.js';
 
+
 dayjs.extend(duration);
 
 const humanizeFilmDueDate = (date) => dayjs(date).format('D MMMM YYYY');
@@ -25,6 +26,7 @@ const getWeightForNull = (dateA, dateB) => {
   return null;
 };
 
+
 const getRandomInteger = (a = 0, b = 1) => {
   const lower = Math.ceil(Math.min(a, b));
   const upper = Math.floor(Math.max(a, b));
@@ -34,10 +36,10 @@ const getRandomInteger = (a = 0, b = 1) => {
 const getRandomValue = (items) => items[getRandomInteger(0, items.length - 1)];
 
 const filter = {
-  [FilterType.ALL.toLowerCase()]: (films) => films.slice(),
-  [FilterType.WATCHLIST.toLowerCase()]: (films) => films.filter((film) => film.userDetails.watchlist),
-  [FilterType.HISTORY.toLowerCase()]: (films) => films.filter((film) => film.userDetails.alreadyWatched),
-  [FilterType.FAVORITES.toLowerCase()]: (films) => films.filter((film) => film.userDetails.favorite)
+  [FilterType.ALL]: (films) => films.slice(),
+  [FilterType.WATCHLIST]: (films) => films.filter((film) => film.userDetails.watchlist),
+  [FilterType.HISTORY]: (films) => films.filter((film) => film.userDetails.alreadyWatched),
+  [FilterType.FAVORITES]: (films) => films.filter((film) => film.userDetails.favorite)
 };
 
 const updateItem = (items, update) => {
@@ -63,5 +65,12 @@ const sortFilmRating = (filmA, filmB) => {
   return weight ?? filmB.filmInfo.totalRating - filmA.filmInfo.totalRating;
 };
 
+const generateFilter = (films) => Object.entries(filter).map(
+  ([filterName, filterFilms]) => ({
+    name: filterName,
+    count: filterFilms(films).length,
+    type: filterName
+  })
+);
 
-export {getRandomInteger, humanizeFilmDueDate, sortFilmDate, sortFilmRating, getRandomValue, filter, updateItem, formatStringToDateWithTime, formatStringToYear, formatMinutesToTime};
+export {getRandomInteger, humanizeFilmDueDate, sortFilmDate, sortFilmRating, getRandomValue, generateFilter, updateItem, formatStringToDateWithTime, formatStringToYear, formatMinutesToTime, filter};

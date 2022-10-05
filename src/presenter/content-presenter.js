@@ -7,10 +7,11 @@ import FilmLoadingView from '../view/film-loading-view.js';
 import FilmPresenter from './film-presenter.js';
 import ListSortView from '../view/list-sort-view.js';
 import { SortType } from '../mock/const.js';
+
 export default class ContentPresenter {
   #sortComponent = null;
   #filterPresenter = null;
-  #filterType = FilterType.ALL.toLowerCase();
+  #filterType = FilterType.ALL;
   #filterModel = null;
   #filmListComponent = new FilmListView();
   #contentContainer = null;
@@ -21,18 +22,21 @@ export default class ContentPresenter {
   #filmLoadingComponent = null;
   #filmPresenter = new Map();
   #currentSortType = SortType.DEFAULT;
+  #isLoading = true;
 
-  constructor (contentContainer, filmsModel, filterModel, filterPresenter) {
+
+  constructor (contentContainer, filmsModel, filterModel, filterPresenter, commentsModel) {
     this.#contentContainer = contentContainer;
     this.#filmsModel = filmsModel;
     this.#filterModel = filterModel;
     this.#filterPresenter = filterPresenter;
-
+    this.#commentsModel = commentsModel;
     this.#filterModel.addObserver(this.#handleFilterTypeChange);
+    this.#filmsModel.addObserver(this.#handleFilmsEvent);
   }
 
   get films() {
-    this.#filterType = this.#filterModel.filter.toLowerCase();
+    this.#filterType = this.#filterModel.filter;
     const films = this.#filmsModel.films;
     const filteredFilms = filter[this.#filterType](films);
 
@@ -66,14 +70,18 @@ export default class ContentPresenter {
   };
 
   #renderFilm = (film) => {
-    const filmPresenter = new FilmPresenter(this.#filmListComponent.element, this.#handleFilmChange, this.#handleModeChange);
+    const filmPresenter = new FilmPresenter(this.#filmListComponent.element, this.#handleFilmChange, this.#handleModeChange, this.#commentsModel);
     filmPresenter.init(film);
     this.#filmPresenter.set(film.id, filmPresenter);
   };
 
   #renderFilms = (films) => {
     this.#showMoreButtonComponent = new ShowMoreButtonView();
-    this.#filmLoadingComponent = new FilmLoadingView(LoadigText[this.#filterType.toUpperCase()]);
+    if(this.#isLoading) {
+      this.#filmLoadingComponent = new FilmLoadingView(LoadigText.LOADING);
+    } else {
+      this.#filmLoadingComponent = new FilmLoadingView(LoadigText[this.#filterType.toUpperCase()]);
+    }
     this.#filterPresenter.init();
     if (films.length <= 0) {
       render(this.#filmLoadingComponent, this.#filmListComponent.element);
@@ -105,16 +113,22 @@ export default class ContentPresenter {
     this.#showMoreButtonComponent = null;
   };
 
-  #handleFilmChange = (updatedFilm) => {
-    this.#filmsModel.update(updatedFilm);
-    this.#filterPresenter.init();
-    if(this.#filterType !== FilterType.ALL.toLowerCase()) {
-      this.#clearFilmList();
-      this.#renderFilms(this.films);
-      return;
-    }
-    if(this.#filmPresenter.get(updatedFilm.id)) {
-      this.#filmPresenter.get(updatedFilm.id).init(updatedFilm);
+  #handleFilmChange = async (updatedFilm) => {
+    try {
+      await this.#filmsModel.update(updatedFilm);
+      this.#filterPresenter.init();
+      if(this.#filterType !== FilterType.ALL) {
+        this.#clearFilmList();
+        this.#renderFilms(this.films);
+        return;
+      }
+      const filmPresenter = this.#filmPresenter.get(updatedFilm.id);
+      if(filmPresenter) {
+        filmPresenter.init(updatedFilm);
+        filmPresenter.updatePopup();
+      }
+    } catch (err) {
+      // TODO сделать обработку ошибок
     }
   };
 
@@ -147,6 +161,14 @@ export default class ContentPresenter {
     this.#filterType = filterType;
     this.#clearFilmList();
     this.#renderFilms(this.films);
+  };
+
+  #handleFilmsEvent = (type, payload) => {
+    if (type === 'init') {
+      this.#clearFilmList();
+      this.#isLoading = false;
+      this.#renderFilms(payload);
+    }
   };
 
 }

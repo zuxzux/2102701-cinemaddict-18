@@ -16,6 +16,7 @@ export default class FilmPresenter {
   #changeData = null;
   #changeMode = null;
   #mode = Mode.DEFAULT;
+  #commentsModel = null;
 
   #viewData = {
     emotion: null,
@@ -23,26 +24,18 @@ export default class FilmPresenter {
     scrollPosition: 0
   };
 
-  constructor(filmListContainer, changeData, changeMode) {
+  constructor(filmListContainer, changeData, changeMode, commentsModel) {
     this.#filmListContainer = filmListContainer;
     this.#changeData = changeData;
     this.#changeMode = changeMode;
+    this.#commentsModel = commentsModel;
   }
 
   init = (film) => {
     this.#film = film;
-    this.#comments = film.comments;
-
     const prevFilmComponent = this.#filmComponent;
-    const prevFilmDetailsComponent = this.#filmDetailsComponent;
 
     this.#filmComponent = new FilmCardView(this.#film);
-
-    if(prevFilmDetailsComponent) {
-      prevFilmDetailsComponent.updateElement(this.#film);
-    } else {
-      this.#createFilmDetailsComponent();
-    }
 
     if(prevFilmComponent === null) {
       render(this.#filmComponent, this.#filmListContainer);
@@ -52,8 +45,6 @@ export default class FilmPresenter {
     }
 
     replace(this.#filmComponent, prevFilmComponent);
-
-    this.#filmDetailsComponent.setScrollPosition();
 
     this.#addOpenPopupEventListeners();
     this.#addFiltersButtonsEventListeners();
@@ -66,9 +57,18 @@ export default class FilmPresenter {
     }
   };
 
+  updatePopup = () => {
+    const prevFilmDetailsComponent = this.#filmDetailsComponent;
+    if(prevFilmDetailsComponent) {
+      prevFilmDetailsComponent.updateElement({...this.#film, comments: this.#commentsModel.comments});
+    } else {
+      this.#createFilmDetailsComponent();
+    }
+    this.#filmDetailsComponent.setScrollPosition();
+  };
+
   #createFilmDetailsComponent = () => {
     this.#filmDetailsComponent = new FilmDetailsView(this.#film, this.#comments, this.#viewData, this.#updateViewData);
-
     this.#filmDetailsComponent.setCloseBtnClickHandler(() => {
       this.#removePopupHandler();
       document.removeEventListener('keydown', this.#onEscKeyDown);
@@ -108,7 +108,11 @@ export default class FilmPresenter {
     this.#viewData = {...viewData};
   };
 
-  #openPopupHandler = () => {
+  #openPopupHandler = async () => {
+
+    await this.#commentsModel.init(this.#film.id);
+    this.#comments = this.#commentsModel.comments;
+
     if (!this.#filmDetailsComponent) {
       this.#createFilmDetailsComponent();
     }
