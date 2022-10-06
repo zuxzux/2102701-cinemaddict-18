@@ -1,4 +1,4 @@
-import { nanoid } from 'nanoid';
+//import { nanoid } from 'nanoid';
 import he from 'he';
 import AbstractStatefulView from '../framework/view/abstract-stateful-view.js';
 import { humanizeFilmDueDate } from '../utils.js';
@@ -207,11 +207,10 @@ export default class FilmDetailsView extends AbstractStatefulView {
   #addCommentKeydown = (evt) => {
     if(evt.ctrlKey && evt.key === 'Enter') {
       this._callback.addComment({
-        author: 'no name',
+        author: this._state.comment.author,
         comment: this._state.comment,
         date: new Date(),
-        emotion: emotions[this._state.checkedEmotion],
-        id: nanoid()
+        emotion: this._state.checkedEmotion
       });
     }
   };

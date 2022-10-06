@@ -1,12 +1,12 @@
-import ShowMoreButtonView from '../view/showmore-button-view.js';
+import ShowMoreButtonView from '../view/show-more-button-view.js';
 import FilmListView from '../view/film-list-view.js';
 import {sortFilmDate, sortFilmRating, filter } from '../utils.js';
 import { render, RenderPosition } from '../framework/render.js';
-import {FILM_COUNT_PER_STEP, FilterType, LoadigText} from '../mock/const.js';
+import {FILM_COUNT_PER_STEP, FilterType, LoadigText} from '../common/const.js';
 import FilmLoadingView from '../view/film-loading-view.js';
 import FilmPresenter from './film-presenter.js';
 import ListSortView from '../view/list-sort-view.js';
-import { SortType } from '../mock/const.js';
+import { SortType } from '../common/const.js';
 
 export default class ContentPresenter {
   #sortComponent = null;

@@ -1,6 +1,6 @@
 import dayjs from 'dayjs';
 import duration from 'dayjs/plugin/duration';
-import { FilterType } from './mock/const.js';
+import { FilterType } from './common/const.js';
 
 
 dayjs.extend(duration);
@@ -33,27 +33,12 @@ const getRandomInteger = (a = 0, b = 1) => {
   return Math.floor(lower + Math.random() * (upper - lower + 1));
 };
 
-const getRandomValue = (items) => items[getRandomInteger(0, items.length - 1)];
-
 const filter = {
   [FilterType.ALL]: (films) => films.slice(),
   [FilterType.WATCHLIST]: (films) => films.filter((film) => film.userDetails.watchlist),
   [FilterType.HISTORY]: (films) => films.filter((film) => film.userDetails.alreadyWatched),
   [FilterType.FAVORITES]: (films) => films.filter((film) => film.userDetails.favorite)
 };
-
-const updateItem = (items, update) => {
-  const index = items.findIndex((item) => item.id === update.id);
-  if(index === -1) {
-    return items;
-  }
-  return [
-    ...items.slice(0, index),
-    update,
-    ...items.slice(index + 1),
-  ];
-};
-
 
 const sortFilmDate = (filmA, filmB) => {
   const weight = getWeightForNull(filmA.filmInfo.release.date, filmB.filmInfo.release.date);
@@ -73,4 +58,4 @@ const generateFilter = (films) => Object.entries(filter).map(
   })
 );
 
-export {getRandomInteger, humanizeFilmDueDate, sortFilmDate, sortFilmRating, getRandomValue, generateFilter, updateItem, formatStringToDateWithTime, formatStringToYear, formatMinutesToTime, filter};
+export {getRandomInteger, humanizeFilmDueDate, sortFilmDate, sortFilmRating, generateFilter, formatStringToDateWithTime, formatStringToYear, formatMinutesToTime, filter};

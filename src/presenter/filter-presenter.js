@@ -5,11 +5,11 @@ import { render, replace, remove } from '../framework/render.js';
 export default class FilterPresenter {
   #filterComponent = null;
   #filterModel = null;
-  #filterContainter = null;
+  #filterContainer = null;
   #filmsModel = null;
 
   constructor(filterContainer, filmsModel, filterModel) {
-    this.#filterContainter = filterContainer;
+    this.#filterContainer = filterContainer;
     this.#filmsModel = filmsModel;
     this.#filterModel = filterModel;
     this.#filterModel.addObserver(this.#handleModelEvent);
@@ -23,7 +23,7 @@ export default class FilterPresenter {
     this.#filterComponent = new ListFilterView(filters, this.#filterModel.filter);
     this.#filterComponent.setFilterTypeChangeHandler(this.#filterTypeChangeHandler);
     if (prevFilterComponent === null) {
-      render(this.#filterComponent, this.#filterContainter);
+      render(this.#filterComponent, this.#filterContainer);
       return;
     }
 

@@ -29,6 +29,8 @@ export default class FilmPresenter {
     this.#changeData = changeData;
     this.#changeMode = changeMode;
     this.#commentsModel = commentsModel;
+
+    this.#commentsModel.addObserver(this.#addCommentResponse);
   }
 
   init = (film) => {
@@ -60,11 +62,17 @@ export default class FilmPresenter {
   updatePopup = () => {
     const prevFilmDetailsComponent = this.#filmDetailsComponent;
     if(prevFilmDetailsComponent) {
-      prevFilmDetailsComponent.updateElement({...this.#film, comments: this.#commentsModel.comments});
+      prevFilmDetailsComponent.updateElement({...this.#film, comments: this.#commentsModel.comments, comment: '', checkedEmotion: ''});
     } else {
       this.#createFilmDetailsComponent();
     }
     this.#filmDetailsComponent.setScrollPosition();
+  };
+
+  #addCommentResponse = (type, filmId) => {
+    if (type === 'update' && this.#film.id === filmId) {
+      this.updatePopup();
+    }
   };
 
   #createFilmDetailsComponent = () => {
@@ -81,9 +89,7 @@ export default class FilmPresenter {
   };
 
   #addComment = (comment) => {
-    this.#film.comments.push(comment);
-    this.#changeData({...this.#film, comments: this.#film.comments, comment: '', checkedEmotion: ''});
-
+    this.#commentsModel.addComment(this.#film.id, comment);
   };
 
   #addOpenPopupEventListeners = () => {
@@ -147,7 +153,10 @@ export default class FilmPresenter {
   };
 
   #deleteClickHandler = (commentId) => {
-    this.#changeData({...this.#film, comments: this.#film.comments.filter((comment) => comment.id !== commentId)});
+    this.#commentsModel.deleteComment(commentId).then(() => {
+      this.updatePopup();
+    });
+    //this.#changeData({...this.#film, comments: this.#film.comments.filter((comment) => comment.id !== commentId)});
   };
 
   #addToWatchlistHandler = () => {

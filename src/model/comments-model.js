@@ -32,24 +32,51 @@ export default class CommentsModel extends Observable {
     return this.#comments;
   };
 
-  add = (update) => {
-    this.#allComments.push(update);
-    this._notify(update);
+  addComment = async (filmId, update) => {
+    try {
+      const response = await this.#commentsApiService.addComment(filmId, update);
+      const newComments = response.comments.map(this.#adaptToClient);
+      this.#comments = newComments;
+      this._notify('update', filmId);
+
+    } catch(err) {
+      throw new Error('Can\'t add comment');
+    }
   };
 
-  delete = (update) => {
-    const index = this.#allComments.findIndex((comment) => comment.id === update.id);
+  deleteComment = async (commentId) => {
+    const index = this.#comments.findIndex((comment) => comment.id === commentId);
 
     if(index === -1) {
       throw new Error('Can\'t delete unexisting comment');
     }
 
-    this.#allComments = [
-      ...this.#allComments.slice(0, index),
-      ...this.#allComments.slice(index + 1)
-    ];
+    try {
+      await this.#commentsApiService.deleteComment(commentId);
+      this.#comments = [
+        ...this.#comments.slice(0, index),
+        ...this.#comments.slice(index + 1)
+      ];
 
-    this._notify(update);
+      this._notify('delete', commentId);
+
+    } catch(err) {
+      throw new Error('Can\'t delete comment');
+    }
+
+
+  };
+
+  #adaptToClient = (comment) => {
+    const adaptedComment = {
+      id: comment.id,
+      comment: comment.comment,
+      date: comment.date !== null ? new Date(comment.date) : null,
+      author: comment.author,
+      emotion: comment.emotion
+    };
+
+    return adaptedComment;
   };
 }
 

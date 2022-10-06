@@ -28,15 +28,4 @@ const FilterType = {
   FAVORITES: 'Favorites'
 };
 
-
-const Age = {
-  min: 0,
-  max: 18
-};
-
-const Rating = {
-  min: 0,
-  max: 10
-};
-
-export {Rating, Age, SortType, LoadigText, nameCount, FILM_COUNT, GenresCount, COMMENT_COUNT, FILM_COUNT_PER_STEP, FilterType};
+export {SortType, LoadigText, nameCount, FILM_COUNT, GenresCount, COMMENT_COUNT, FILM_COUNT_PER_STEP, FilterType};

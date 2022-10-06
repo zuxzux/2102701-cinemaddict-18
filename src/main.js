@@ -9,7 +9,7 @@ import CommentsApiService from './comment-api-service.js';
 import CommentsModel from './model/comments-model.js';
 
 const AUTHORIZATION = 'Basic alrib56naerbin';
-const END_POINT = 'https://18.ecmascript.pages.academy/cinemaddict/';
+const END_POINT = 'https://18.ecmascript.pages.academy/cinemaddict';
 
 
 const siteMainElement = document.querySelector('.main');
