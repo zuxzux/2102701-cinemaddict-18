@@ -156,7 +156,6 @@ export default class FilmPresenter {
     this.#commentsModel.deleteComment(commentId).then(() => {
       this.updatePopup();
     });
-    //this.#changeData({...this.#film, comments: this.#film.comments.filter((comment) => comment.id !== commentId)});
   };
 
   #addToWatchlistHandler = () => {

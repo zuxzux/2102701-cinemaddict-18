@@ -1,4 +1,3 @@
-//import { nanoid } from 'nanoid';
 import he from 'he';
 import AbstractStatefulView from '../framework/view/abstract-stateful-view.js';
 import { humanizeFilmDueDate } from '../utils.js';
